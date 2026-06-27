@@ -1,49 +1,34 @@
-# software-spotify-
-Smart Playlist Simulator — A Java CLI app simulating a music player using hand-built data structures. Features a manual Doubly Linked List for two-way navigation, a custom FIFO "Up Next" queue, manual sorting by release year, and linear search. No Java Collection Framework used.
+# Smart Playlist Simulator
 
-Here's the full breakdown for your GitHub description:
-
----
-
-## What is this project?
-
-A console-based Java CLI application that simulates a smart music streaming playlist. It manages a song library using hand-built data structures — no Java Collection Framework allowed — and supports two-way navigation, a priority interrupt queue, sorting, and searching.
+A console-based Java CLI application that simulates a smart music streaming playlist manager. All data structures are implemented from scratch — no Java Collection Framework (`java.util.*`) is used except `Scanner` for user input.
 
 ---
 
-## Features implemented
+## Features
 
-**Doubly linked list playlist** — the main song list is built entirely from scratch using manual `next` and `prev` pointers on each node. This allows the player to navigate forward and backward through songs without needing Java's built-in `LinkedList`.
-
-**"Up Next" interrupt queue** — a separate custom FIFO queue sits alongside the main playlist. When a song is added to "Up Next", it takes priority: the player must fully drain the queue before resuming the main playlist. This mirrors how real streaming apps handle song interruption.
-
-**Two-way navigation** — `nextSong()` and `previousSong()` move the `current` pointer through the doubly linked list, with null-safety checks to prevent crashes at either end of the playlist.
-
-**Manual sorting** — the song library can be sorted by release year using a hand-coded algorithm (Bubble Sort or Selection Sort), modified to work directly on a linked list by swapping node data rather than array indices.
-
-**Linear search** — keyword-based title search implemented manually, walking the linked list node by node without any helper library.
-
-**CLI menu** — an interactive terminal menu built with a loop in `Main.java`, tying together all modules and enforcing the interruption rule: pressing Next always checks the queue first.
-
-**Hardcoded test data** — 20–30 dummy songs are baked in to support system testing without needing a database or file input.
+- **Two-way playlist navigation** — the main song list is built as a manual Doubly Linked List with `next` and `prev` pointers, allowing the player to move forward and backward through songs.
+- **"Up Next" interrupt queue** — a custom FIFO queue that takes priority over the main playlist. When songs are queued, the player drains the queue completely before resuming the main playlist.
+- **Manual sorting** — the song library can be sorted by release year using a hand-coded Bubble Sort or Selection Sort algorithm that operates directly on linked list nodes.
+- **Linear search** — keyword-based title search that walks the linked list node by node without any helper library.
+- **Interactive CLI menu** — a terminal menu built with a loop in `Main.java`, coordinating all modules and enforcing the interruption logic.
 
 ---
 
-## Class structure
+## Class Structure
 
-| Class | Role |
+| Class | Description |
 |---|---|
-| `Lagu.java` | Data model — holds `judul`, `artis`, `tahunRilis` with private fields, constructor, and getters/setters |
-| `NodeLagu.java` | Node wrapper — stores a `Lagu` object plus manual `next` and `prev` pointers |
-| `Playlist.java` | Doubly linked list — manages `head`, `tail`, `current`; implements `tambahLagu()`, `nextSong()`, `previousSong()` |
-| `UpNextQueue.java` | Custom FIFO queue — manages `front` and `rear` pointers; implements `enqueueSong()`, `dequeueSong()`, `isEmpty()` |
-| `Sorting.java` | Manual sort — sorts the linked list by `tahunRilis` using a from-scratch algorithm |
-| `Searching.java` | Manual search — linear search through the list matching a keyword against `judul` |
-| `Main.java` | Entry point — CLI loop, user input via `Scanner`, interruption logic coordinating `UpNextQueue` and `Playlist` |
+| `Lagu.java` | Data model for a song — stores `judul`, `artis`, and `tahunRilis` |
+| `NodeLagu.java` | Node wrapper — holds a `Lagu` object with manual `next` and `prev` pointers |
+| `Playlist.java` | Manual Doubly Linked List — handles song insertion and next/previous navigation |
+| `UpNextQueue.java` | Manual FIFO queue — handles enqueue, dequeue, and empty checks |
+| `Sorting.java` | Manual sort algorithm — sorts songs by release year |
+| `Searching.java` | Manual linear search — finds songs by title keyword |
+| `Main.java` | Entry point — CLI loop, user input, and interruption logic |
 
 ---
 
-## Tech stack
+## Tech Stack
 
-- **Java** (console/CLI, no GUI)
-- **No `java.util.*`** except `java.util.Scanner` for CLI input — all lists, queues, sorting, and searching are implemented manually from scratch
+- **Language:** Java (Console / CLI)
+- **Restriction:** No `java.util.*` (except `Scanner`) — all lists, queues, sorting, and searching are built manually from scratch
