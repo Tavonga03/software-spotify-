@@ -1,0 +1,208 @@
+package com.mycompany.projectsdl;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        MusicPlayer player = new MusicPlayer();
+
+        // Memuat daftar lagu bawaan ke dalam playlist
+        System.out.println("  Memuat perpustakaan lagu...");
+        player.loadDefaultSongs();
+        System.out.println("  30 lagu berhasil dimuat.\n");
+
+        // Menampilkan lagu yang sedang diputar saat aplikasi dimulai
+        player.displayNowPlaying();
+
+        // Variabel untuk mengontrol perulangan menu
+        boolean running = true;
+        while (running) {
+
+            printMenu();
+            System.out.print("  Pilih menu: ");
+            String input = sc.nextLine().trim();
+
+            switch (input) {
+
+                // Memilih dan memutar lagu dari playlist
+                case "0":
+                    handlePlaySong(sc, player);
+                    break;
+
+                // Memutar lagu berikutnya
+                case "1":
+                    player.playNext();
+                    break;
+
+                // Memutar lagu sebelumnya dari riwayat
+                case "2":
+                    player.playPrevious();
+                    break;
+
+                // Menambahkan lagu ke antrian Up Next
+                case "3":
+                    System.out.println("\n  Lagu yang tersedia di playlist:");
+                    player.showPlaylist();
+                    System.out.print("\n  Masukkan judul lagu yang ingin ditambahkan ke Up Next: ");
+                    String title = sc.nextLine().trim();
+                    player.addToUpNextByTitle(title);
+                    break;
+
+                // Menampilkan isi antrian Up Next
+                case "4":
+                    player.showUpNextQueue();
+                    break;
+
+                // Menampilkan seluruh playlist utama
+                case "5":
+                    player.showPlaylist();
+                    break;
+
+                // Menampilkan perpustakaan lagu yang sudah diurutkan
+                case "6":
+                    player.showLibrary();
+                    break;
+
+                // Menampilkan riwayat pemutaran lagu
+                case "7":
+                    player.showHistory();
+                    break;
+
+                // Menjalankan demo otomatis seluruh fitur
+                case "8":
+                    runAutoDemo(player);
+                    break;
+
+                // Keluar dari program
+                case "9":
+                    System.out.println("\n  Sampai jumpa!");
+                    running = false;
+                    break;
+
+                // Menangani input yang tidak valid
+                default:
+                    System.out.println("  Pilihan tidak valid. Silakan coba lagi.");
+            }
+
+            // Memberi jeda sebelum kembali ke menu utama
+            if (running) {
+                System.out.println("\n  ---------------------------------------------");
+                System.out.print("  Tekan Enter untuk melanjutkan...");
+                sc.nextLine();
+            }
+        }
+
+        // Menutup Scanner setelah program selesai
+        sc.close();
+    }
+
+    // Menampilkan menu utama
+    private static void printMenu() {
+        System.out.println();
+        System.out.println("  +---------------------------------------------------+");
+        System.out.println("  |         SMART PLAYLIST SIMULATOR                  |");
+        System.out.println("  +---------------------------------------------------+");
+        System.out.println("  |  [0] Play Song                                    |");
+        System.out.println("  |  [1] Next Song                                    |");
+        System.out.println("  |  [2] Previous Song                                |");
+        System.out.println("  |  [3] Tambah Lagu ke Up Next                       |");
+        System.out.println("  |  [4] Lihat Antrean Up Next                        |");
+        System.out.println("  |  [5] Tampilkan Main Playlist                      |");
+        System.out.println("  |  [6] Perpustakaan (Urut Tahun)                    |");
+        System.out.println("  |  [7] Riwayat Pemutaran                            |");
+        System.out.println("  |  [8] Demo Otomatis                                |");
+        System.out.println("  |  [9] Keluar                                       |");
+        System.out.println("  +---------------------------------------------------+");
+    }
+
+    // Menangani submenu Play Song
+    private static void handlePlaySong(Scanner sc, MusicPlayer player) {
+        System.out.println("\n  ========== PLAY SONG ==========");
+        System.out.println("  [1] Song");
+        System.out.println("  [2] Singer");
+        System.out.println("  [3] Year");
+        System.out.println("  [0] Kembali");
+        System.out.print("  Pilih filter: ");
+
+        String choice = sc.nextLine().trim();
+
+        switch (choice) {
+
+            // Cari berdasarkan judul lagu
+            case "1":
+                System.out.print("  Masukkan judul lagu: ");
+                String songTitle = sc.nextLine().trim();
+                player.playSongByTitle(songTitle);
+                break;
+
+            // Cari berdasarkan nama artis
+            case "2":
+                System.out.print("  Masukkan nama artis: ");
+                String artistName = sc.nextLine().trim();
+                player.playSongByArtist(sc, artistName);
+                break;
+
+            // Cari berdasarkan tahun rilis
+            case "3":
+                System.out.print("  Masukkan tahun rilis: ");
+                String yearInput = sc.nextLine().trim();
+                try {
+                    int year = Integer.parseInt(yearInput);
+                    player.playSongByYear(sc, year);
+                } catch (NumberFormatException e) {
+                    System.out.println("  Input tahun tidak valid.");
+                }
+                break;
+
+            // Kembali ke menu utama
+            case "0":
+                break;
+
+            default:
+                System.out.println("  Pilihan tidak valid.");
+        }
+    }
+
+    // Menjalankan demo otomatis seluruh fitur
+    private static void runAutoDemo(MusicPlayer player) {
+        System.out.println("\n  ====================================================");
+        System.out.println("           DEMO OTOMATIS - SEMUA FITUR               ");
+        System.out.println("  ====================================================");
+
+        System.out.println("\n  [SPEK 6] Perpustakaan terurut berdasarkan tahun rilis:");
+        player.showLibrary();
+
+        System.out.println("\n  [SPEK 2] Menekan Next 3x:");
+        player.playNext();
+        player.playNext();
+        player.playNext();
+
+        System.out.println("\n  [SPEK 4 & 5] Menambahkan 2 lagu ke Up Next:");
+        player.addToUpNextByTitle("Billie Jean");
+        player.addToUpNextByTitle("Imagine");
+
+        System.out.println("\n  Isi Up Next Queue:");
+        player.showUpNextQueue();
+
+        System.out.println("\n  [SPEK 5] Next - harus putar dari Up Next lebih dulu:");
+        player.playNext();
+        player.playNext();
+        player.playNext();
+
+        System.out.println("\n  [SPEK 3] Menekan Previous 2x:");
+        player.playPrevious();
+        player.playPrevious();
+
+        System.out.println("\n  Riwayat pemutaran (History Stack):");
+        player.showHistory();
+
+        System.out.println("\n  Main playlist saat ini:");
+        player.showPlaylist();
+
+        System.out.println("\n  ====================================================");
+        System.out.println("                  DEMO SELESAI                       ");
+        System.out.println("  ====================================================");
+    }
+}
