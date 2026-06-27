@@ -1,0 +1,65 @@
+package com.mycompany.projectsdl;
+
+public class SortingUtil {
+
+    // Mencegah objek SortingUtil dibuat karena seluruh method bersifat static
+    private SortingUtil() {}
+
+    // Mengurutkan array lagu berdasarkan tahun rilis menggunakan Insertion Sort
+    public static void insertionSort(Song[] arr) {
+        if (arr == null || arr.length <= 1) return;
+
+        for (int i = 1; i < arr.length; i++) {
+            Song key = arr[i];
+            int j = i - 1;
+
+            while (j >= 0 && arr[j].getReleaseYear() > key.getReleaseYear()) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+
+            arr[j + 1] = key;
+        }
+    }
+
+    // Mengambil salinan array lagu yang sudah diurutkan
+    public static Song[] getSortedArray(DoublyLinkedList list) {
+        if (list == null || list.isEmpty()) {
+            return new Song[0];
+        }
+
+        Song[] arr = list.toArray();
+        Song[] copy = new Song[arr.length];
+
+        for (int i = 0; i < arr.length; i++) {
+            copy[i] = arr[i];
+        }
+
+        insertionSort(copy);
+        return copy;
+    }
+
+    // Menampilkan seluruh koleksi lagu yang telah diurutkan berdasarkan tahun rilis
+    public static void displaySortedLibrary(DoublyLinkedList list) {
+        Song[] sorted = getSortedArray(list);
+
+        if (sorted.length == 0) {
+            System.out.println("  (Perpustakaan kosong)");
+            return;
+        }
+
+        System.out.println();
+        System.out.println("  +-----------------------------------------------------+");
+        System.out.println("  |        PERPUSTAKAAN LAGU (Urut Tahun)               |");
+        System.out.println("  +-----------------------------------------------------+");
+
+        for (int i = 0; i < sorted.length; i++) {
+            System.out.printf("  %2d. %s%n", (i + 1), sorted[i]);
+        }
+
+        System.out.printf(
+            "%n  Total: %d lagu  |  Algoritma: Insertion Sort  |  Kompleksitas: O(n^2)%n",
+            sorted.length
+        );
+    }
+}
